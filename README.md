@@ -7,8 +7,8 @@ Spring Cloud教程
 
 # SpringCloudoot详细教程 文章汇总
 网上SpringCloud详细教程，大多数案例都来自于官方文档，和看到网上的教程,为了更好的理解，加入了个人的改造。
-SpringBoot版本: 2.1.3
-SpringCloud版本:   
+SpringBoot版本: 2.1.3  
+SpringCloud版本: Greenwich版本  
 
 欢迎访问我的个人博客：https://www.lhdyx.cn  
 # 服务注册与发现
