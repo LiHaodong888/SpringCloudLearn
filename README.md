@@ -13,4 +13,5 @@ SpringCloud版本: Greenwich版本
 欢迎访问我的个人博客：https://www.lhdyx.cn  
 # 服务注册与发现
 [SpringCloud详细教程 | 第一篇： 服务的注册与发现Eureka(Greenwich版本)](https://www.lhdyx.cn/article/79)
-
+# 客户端Ribbon
+[SpringCloud详细教程 | 第二篇： 客户端负载平衡器Ribbon(Greenwich版本)](https://www.lhdyx.cn/article/80)
