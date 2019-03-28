@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 /**
  * eureka-client 是调用的服务名
  */
-@FeignClient(value = "eureka-client")
+@FeignClient(value = "eureka-client",fallback = EurekaCclientServiceHystric.class)
 public interface EurekaCclientService {
 
     @GetMapping(value = "/hello")
