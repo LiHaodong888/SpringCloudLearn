@@ -29,6 +29,7 @@
         <module>consumer-server</module>
         <module>ribbon-server</module>
         <module>feign-server</module>
+        <module>zuul-server</module>
     </modules>
 
     <dependencies>
