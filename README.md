@@ -15,3 +15,9 @@ SpringCloud版本: Greenwich版本
 [SpringCloud详细教程 | 第一篇： 服务的注册与发现Eureka(Greenwich版本)](https://www.lhdyx.cn/article/79)
 # 客户端Ribbon
 [SpringCloud详细教程 | 第二篇： 客户端负载平衡器Ribbon(Greenwich版本)](https://www.lhdyx.cn/article/80)
+# 声明性REST客户端Feign
+[SpringCloud详细教程 | 第三篇： 声明性REST客户端Feign(Greenwich版本)](https://www.lhdyx.cn/article/81)
+# 断路器客户端Hystrix
+[SpringCloud详细教程 | 第四篇：断路器客户端Hystrix(Greenwich版本)](https://www.lhdyx.cn/article/82)
+# 路由器和过滤器Zuul
+[SpringCloud详细教程 | 第五篇：路由器和过滤器Zuul(Greenwich版本)](https://www.lhdyx.cn/article/83)
