@@ -1,0 +1,118 @@
+server:
+  port: 8768
+eureka:
+  port: 8761
+spring:
+  application:
+    name: gateway-server
+    eureka:
+      client:
+        service-url:
+          defaultZone: http://${eureka.instance.hostname}:${eureka.port}/eureka/
+  redis:
+    host: 127.0.0.1
+    port: 6379
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        # 请求路径匹配
+#        - id: path_route
+#          uri: http://www.lhdyx.cn
+#          predicates:
+#            - Path=/lhd/** # 请求地址携带lhd的,则转发
+#           # 加上StripPrefix=1，否则转发到后端服务时会带上前缀
+#          filters:
+#            - StripPrefix=1
+#          # 请求参数匹配
+#        - id: query_route
+#          uri: http://www.lhdyx.cn
+#          predicates:
+#            - Query=lhd # 请求参数含有lhd
+#          filters:
+#            - StripPrefix=1
+#          # Cookie 匹配
+#        - id: cookie_route
+#          uri: http://www.lhdyx.cn
+#          predicates:
+#            - Cookie=www.lhdyx.cn, lhd # 如果携带cookie,参数名为www.lhdyx.cn,值为lhd,则转发
+#          filters:
+#            - StripPrefix=1
+#          # 时间匹配
+#        - id: after_route
+#          uri: http://www.lhdyx.cn
+#          predicates:
+#            - After=2019-04-02T06:06:06+08:00[Asia/Shanghai] # 此路线与2019年4月2日之后的所有要求相匹配
+#          filters:
+#            - StripPrefix=1
+#          # Header 属性匹配
+#        - id: header_route
+#          uri: http://www.lhdyx.cn
+#          predicates:
+#            - Header=request, \d+ # 如果请求头含有request,且为数字,则转发
+#          filters:
+#            - StripPrefix=1
+#          # 请求方法匹配 post get等
+#        - id: method_route
+#          uri: http://www.lhdyx.cn
+#          predicates:
+#            - Method=/get # 请求方法过滤
+#          filters:
+#            - StripPrefix=1
+#          # ip匹配
+#        - id: ip_route
+#          uri: http://www.lhdyx.cn
+#          predicates:
+#            - RemoteAddr=192.168.1.101 # ip地址
+#          filters:
+#            - StripPrefix=1
+#          # Host 匹配
+#        - id: host_route
+#          uri: http://www.lhdyx.cn
+#          predicates:
+#            - Host=**.lhdyx.cn
+#          filters:
+#            - StripPrefix=1
+          # 重点说下 服务匹配
+        - id: eureka-client # 路由 ID，保持唯一
+          # lb代表从注册中心获取服务，且已负载均衡方式转发
+          uri: lb://eureka-client
+          predicates: # 路由条件，Predicate 接受一个输入参数，返回一个布尔值结果
+            - Path=/client/**
+          filters:
+            - StripPrefix=1
+            # 熔断降级配置
+            - name: Hystrix
+              args:
+                name: default
+                fallbackUri: 'forward:/defaultfallback' # 重定向到失败地址
+              # redis限流 ， filter名称必须是RequestRateLimiter
+            - name: RequestRateLimiter
+              args:
+                # 使用SpEL名称引用Bean，与上面新建的RateLimiterConfig类中的bean的name相同
+                key-resolver: '#{@remoteAddrKeyResolver}'
+                # 每秒最大访问次数
+                redis-rate-limiter.replenishRate: 10
+                # 令牌桶最大容量
+                redis-rate-limiter.burstCapacity: 20
+# hystrix 信号量隔离，3秒后自动超时
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: SEMAPHORE
+          thread:
+            timeoutInMilliseconds: 3000
+  shareSecurityContext: true
+
+
+logging:
+  level:
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.http.server.reactive: DEBUG
+    org.springframework.web.reactive: DEBUG
+    reactor.ipc.netty: DEBUG
